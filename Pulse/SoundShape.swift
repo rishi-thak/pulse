@@ -1,6 +1,6 @@
 import Foundation
 
-/// The live sound-shaping values derived from how far the device is folded.
+/// The live sound-shaping values derived from how far each fold target is bent.
 struct SoundShape: Equatable {
     /// Pitch bend applied to every voice, in cents.
     var pitchCents: Float = 0
@@ -18,21 +18,14 @@ struct SoundShape: Equatable {
 
     init() {}
 
-    init(fold: Double, targets: Set<FoldTarget>) {
-        let amount = Float(min(max(fold, 0), 1))
-        if targets.contains(.pitch) {
-            pitchCents = amount * Self.maxBendSemitones * 100
-        }
-        if targets.contains(.stretch) {
-            rate = 1 - amount * (1 - Self.minRate)
-        }
-        if targets.contains(.texture) {
-            texture = amount
-        }
-        if targets.contains(.filter) {
-            // Exponential sweep sounds even to the ear.
-            cutoff = Self.maxCutoff * pow(Self.minCutoff / Self.maxCutoff, amount)
-        }
+    /// Each amount runs from 0, untouched, to 1, fully bent.
+    init(pitch: Double, stretch: Double, texture: Double, filter: Double) {
+        let clamp = { (amount: Double) in Float(min(max(amount, 0), 1)) }
+        pitchCents = clamp(pitch) * Self.maxBendSemitones * 100
+        rate = 1 - clamp(stretch) * (1 - Self.minRate)
+        self.texture = clamp(texture)
+        // Exponential sweep sounds even to the ear.
+        cutoff = Self.maxCutoff * pow(Self.minCutoff / Self.maxCutoff, clamp(filter))
     }
 
     var pitchDescription: String {

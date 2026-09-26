@@ -19,12 +19,15 @@ struct Sample: Identifiable {
     var peaks: [Float]
     /// Tempo, when known, so decks can be beatmatched.
     var bpm: Double?
+    /// Seconds from the start to the first downbeat, when the tempo is known.
+    var beatOffset: Double
     var kind: Kind
 
-    init(name: String, frames: [Float], bpm: Double? = nil, kind: Kind = .sound) {
+    init(name: String, frames: [Float], bpm: Double? = nil, beatOffset: Double = 0, kind: Kind = .sound) {
         self.name = name
         self.frames = frames
         self.bpm = bpm
+        self.beatOffset = beatOffset
         self.kind = kind
         self.peaks = Self.peaks(of: frames[...], count: Self.peakCount)
     }

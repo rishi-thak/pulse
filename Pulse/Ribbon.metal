@@ -2,9 +2,9 @@
 #include <SwiftUI/SwiftUI.h>
 using namespace metal;
 
-// The sample drawn as a luminous sheet that creases as the device folds.
-// Every fold parameter has a visible counterpart: pitch tints it, stretch
-// spreads its layers, texture shatters it, and the filter blurs and cools it.
+// The sample drawn as a luminous sheet. Every fold parameter has a visible
+// counterpart: pitch tints it, stretch spreads its layers, texture shatters
+// it, and the filter blurs and cools it.
 
 static float hash21(float2 p) {
     p = fract(p * float2(123.34, 456.21));
@@ -69,13 +69,7 @@ static float smoothPeak(device const float *peaks, int count, float u, float rad
         u += (r - 0.5) * shatter * 0.09 * step(0.55, r);
     }
 
-    // The crease: the sheet dips toward its center as the fold deepens,
-    // with the leading half falling into shadow and the trailing half catching light.
-    float fromCenter = abs(u - 0.5) * 2.0;
-    float crease = fold * 0.26 * (0.5 - fromCenter);
-    float centerY = 0.5 + crease;
-    float shade = u < 0.5 ? 1.0 - fold * 0.42 : 1.0 + fold * 0.18;
-    float creaseGlow = fold * exp(-pow((u - 0.5) * 42.0, 2.0));
+    float centerY = 0.5;
 
     // Amplitude, softened by the filter and stepped by texture.
     float a = smoothPeak(peaks, peakCount, u, filterAmount * 0.04);
@@ -106,14 +100,8 @@ static float smoothPeak(device const float *peaks, int count, float u, float rad
     float3 sheet = mix(body, spine, exp(-depth * 4.0) * 0.6);
     sheet = mix(sheet, float3(1.0), rim * 0.8);
 
-    rgb += sheet * inside * bright * shade;
-    rgb += hsv2rgb(float3(coolHue, sat, 1.0)) * glow * bright * (0.5 + 0.5 * shade);
-    rgb += float3(1.0, 0.95, 0.9) * creaseGlow * 0.9 * (inside + glow * 0.5);
-
-    // The fold line itself, drawn across the whole stage.
-    if (drawsBackground > 0.0) {
-        rgb += float3(1.0) * fold * 0.12 * exp(-pow((u - 0.5) * width * 0.08, 2.0));
-    }
+    rgb += sheet * inside * bright;
+    rgb += hsv2rgb(float3(coolHue, sat, 1.0)) * glow * bright;
 
     // Playheads: bright beams with a coloured halo. hue < 0 means white.
     for (int i = 0; i < headCount / 2; i++) {

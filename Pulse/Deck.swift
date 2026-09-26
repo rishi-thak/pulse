@@ -48,6 +48,8 @@ final class Deck {
     private(set) var peaks: [Float]
     private(set) var duration: Double
     private(set) var bpm: Double?
+    /// Seconds into the sample where its first downbeat falls.
+    private(set) var beatOffset: Double
     let equalizer = AVAudioUnitEQ(numberOfBands: 3)
     var low: Float = 0 { didSet { equalizer.bands[0].gain = low } }
     var mid: Float = 0 { didSet { equalizer.bands[1].gain = mid } }
@@ -56,15 +58,19 @@ final class Deck {
     private(set) var hotCues: [Double?] = Array(repeating: nil, count: 4)
 
     var isPlaying = false {
-        didSet { updateMotor() }
+        didSet {
+            if isPlaying, !oldValue { playStartedAt = .now }
+            updateMotor()
+        }
     }
+    /// When play was last pressed, so beat sync can tell which deck leads.
+    private(set) var playStartedAt: Date?
     /// Speed offset like a tempo fader: −0.16 is 16% slower, 0.16 is 16% faster.
     var tempo: Double = 0 {
         didSet { updateMotor() }
     }
-    var tempoRange: TempoRange = .standard {
-        didSet { tempo = min(max(tempo, -tempoRange.limit), tempoRange.limit) }
-    }
+    /// How far the tempo can move either way; four times slower to four times faster.
+    private static let tempoLimits = -0.75...3.0
     /// The fold's pitch and stretch bend, applied on top of the fader.
     private var bend: Float = 1
     /// 1 forwards, −1 when the sample is reversed.
@@ -80,6 +86,7 @@ final class Deck {
         peaks = sample.peaks
         duration = sample.duration
         bpm = sample.bpm
+        beatOffset = sample.beatOffset
         turntable.setSample(sample.frames)
         restoreCues(for: sample)
         for (index, frequency) in [Float(180), 1000, 8000].enumerated() {
@@ -91,19 +98,28 @@ final class Deck {
         }
     }
 
+    /// Drops a new track on the platter at its own tempo.
     func load(_ sample: Sample) {
         sampleName = sample.name
         peaks = sample.peaks
         duration = sample.duration
         bpm = sample.bpm
+        beatOffset = sample.beatOffset
+        tempo = 0
         turntable.setSample(sample.frames)
         restoreCues(for: sample)
     }
 
     private func restoreCues(for sample: Sample) {
-        // Audio identity stays stable across imports and does not collide on filenames.
-        let digest = sample.frames.withUnsafeBytes { SHA256.hash(data: $0) }
-        cueStorageKey = "hotCues." + digest.map { String(format: "%02x", $0) }.joined()
+        // Keyed on the audio itself, so cues survive renames and don't collide on
+        // filenames. A stride through the frames identifies a track without
+        // hashing every sample of a long song on the main thread.
+        var hasher = SHA256()
+        withUnsafeBytes(of: sample.frames.count) { hasher.update(bufferPointer: $0) }
+        for index in stride(from: 0, to: sample.frames.count, by: 997) {
+            withUnsafeBytes(of: sample.frames[index]) { hasher.update(bufferPointer: $0) }
+        }
+        cueStorageKey = "hotCues." + hasher.finalize().map { String(format: "%02x", $0) }.joined()
         let stored = UserDefaults.standard.array(forKey: cueStorageKey) as? [Double]
         if let stored, stored.count == 4 {
             hotCues = stored.map { $0.isFinite && $0 >= 0 && $0 < 1 ? $0 : nil }
@@ -112,14 +128,26 @@ final class Deck {
         }
     }
 
+    /// Jumps to a saved cue, or saves the needle's spot as a new one. New cues
+    /// snap to the nearest beat when the tempo is known, so jumping between
+    /// them keeps a beat-synced pair in time.
     func fireCue(_ index: Int) {
         guard hotCues.indices.contains(index) else { return }
         if let saved = hotCues[index] {
             turntable.cueRequest.store(Float(saved), ordering: .relaxed)
         } else {
-            hotCues[index] = min(max(position, 0), 0.999999)
+            hotCues[index] = min(max(quantized(position), 0), 0.999999)
             saveCues()
         }
+    }
+
+    /// The nearest beat to a position, as a fraction of the sample.
+    private func quantized(_ position: Double) -> Double {
+        guard let bpm, bpm > 0, duration > 0 else { return position }
+        let beatSeconds = 60 / bpm
+        let seconds = position * duration
+        let beats = ((seconds - beatOffset) / beatSeconds).rounded()
+        return (beatOffset + beats * beatSeconds) / duration
     }
 
     func clearCue(_ index: Int) {
@@ -143,8 +171,7 @@ final class Deck {
         bpm.map { $0 * (1 + tempo) }
     }
 
-    /// Moves the tempo fader so the track plays at this tempo, widening the
-    /// range if it has to. A track with no tempo yet is tagged with it instead.
+    /// Plays the track at this tempo. A track with no tempo yet is tagged with it instead.
     func setBPM(_ target: Double) {
         guard target > 0 else { return }
         guard let bpm, bpm > 0 else {
@@ -152,10 +179,32 @@ final class Deck {
             return
         }
         let wanted = target / bpm - 1
-        if let range = TempoRange.fitting(wanted), range.limit > tempoRange.limit {
-            tempoRange = range
-        }
-        tempo = min(max(wanted, -tempoRange.limit), tempoRange.limit)
+        tempo = min(max(wanted, Self.tempoLimits.lowerBound), Self.tempoLimits.upperBound)
+    }
+
+    // MARK: Beat grid
+
+    /// Seconds per bar in the sample's own time, when the tempo is known.
+    private var barSeconds: Double? {
+        bpm.map { 240 / $0 }
+    }
+
+    /// How far through the current bar the needle is, from 0 to 1.
+    var barPhase: Double? {
+        guard let barSeconds else { return nil }
+        let bars = (position * duration - beatOffset) / barSeconds
+        return bars - floor(bars)
+    }
+
+    /// The spot nearest the needle that sits at this point in a bar, as a fraction of the sample.
+    func position(atBarPhase phase: Double) -> Double? {
+        guard let barSeconds, duration > 0 else { return nil }
+        let now = position * duration
+        let bar = floor((now - beatOffset) / barSeconds)
+        let candidates = [bar - 1, bar, bar + 1].map { beatOffset + ($0 + phase) * barSeconds }
+        let inside = candidates.filter { $0 >= 0 && $0 < duration }
+        guard let nearest = (inside.isEmpty ? candidates : inside).min(by: { abs($0 - now) < abs($1 - now) }) else { return nil }
+        return min(max(nearest / duration, 0), 0.9999)
     }
 
     /// Takes the engine's fold bend and play direction, then respins the motor.

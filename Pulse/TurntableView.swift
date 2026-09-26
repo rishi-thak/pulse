@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// A platter you spin to scratch, with transport and a tempo fader beneath it.
+/// A platter you spin to scratch, with cue and play beneath it.
 struct TurntableView: View {
     var engine: SamplerEngine
     @Bindable var deck: Deck
@@ -76,7 +76,7 @@ struct TurntableView: View {
 
     private var bpmMessage: String {
         if let bpm = deck.bpm {
-            return "\(deck.sampleName) is \(Int(bpm.rounded())) BPM. The tempo fader moves to match, widening its range if it has to."
+            return "\(deck.sampleName) is \(Int(bpm.rounded())) BPM. Enter the tempo it should play at."
         }
         return "\(deck.sampleName) has no tempo yet. Enter one so it can be synced."
     }
@@ -157,17 +157,7 @@ struct TurntableView: View {
             .tint(deck.slot.color)
             .labelStyle(.iconOnly)
 
-            Slider(value: $deck.tempo, in: -deck.tempoRange.limit...deck.tempoRange.limit) {
-                Text("Tempo")
-            } minimumValueLabel: {
-                Text("−")
-                    .accessibilityHidden(true)
-            } maximumValueLabel: {
-                Text("+")
-                    .accessibilityHidden(true)
-            }
-            .tint(deck.slot.color)
-            .accessibilityValue("\(deck.tempo > 0 ? "+" : "")\(Int((deck.tempo * 100).rounded()))%")
+            Spacer(minLength: 0)
         }
         .font(.caption.weight(.semibold))
     }

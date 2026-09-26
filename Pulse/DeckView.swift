@@ -13,7 +13,7 @@ struct DeckView: View {
                     VStack(spacing: 12) {
                         FoldPanel(engine: engine)
                             .fixedSize(horizontal: false, vertical: true)
-                        MixerView(decks: [engine.deckA, engine.deckB], axis: .vertical)
+                        MixerView(engine: engine, axis: .vertical)
                     }
                     .frame(width: min(max(proxy.size.width * 0.34, 224), 280))
                     TurntableView(engine: engine, deck: engine.deckB)
@@ -24,37 +24,59 @@ struct DeckView: View {
                         TurntableView(engine: engine, deck: engine.deckA)
                         TurntableView(engine: engine, deck: engine.deckB)
                     }
-                    MixerView(decks: [engine.deckA, engine.deckB], axis: .horizontal)
+                    MixerView(engine: engine, axis: .horizontal)
                 }
             }
         }
     }
 }
 
-/// A channel fader per deck, each with its own level meter.
+/// Beat sync beside a channel fader per deck, each with its own level meter.
 struct MixerView: View {
-    var decks: [Deck]
+    var engine: SamplerEngine
     var axis: Axis
 
     var body: some View {
-        Group {
+        HStack(spacing: 14) {
+            syncButton
             if axis == .vertical {
                 HStack(spacing: 14) {
-                    ForEach(decks, id: \.slot) { deck in
-                        ChannelFader(deck: deck, axis: axis)
-                    }
+                    faders
                 }
             } else {
                 VStack(spacing: 10) {
-                    ForEach(decks, id: \.slot) { deck in
-                        ChannelFader(deck: deck, axis: axis)
-                    }
+                    faders
                 }
             }
         }
         .padding(12)
         .frame(maxWidth: .infinity, maxHeight: axis == .vertical ? .infinity : nil)
         .glassEffect(.regular, in: .rect(cornerRadius: 18))
+    }
+
+    private var faders: some View {
+        ForEach([engine.deckA, engine.deckB], id: \.slot) { deck in
+            ChannelFader(deck: deck, axis: axis)
+        }
+    }
+
+    private var syncButton: some View {
+        Button {
+            engine.beatSync()
+        } label: {
+            VStack(spacing: 4) {
+                Image(systemName: "arrow.triangle.2.circlepath")
+                    .font(.body.weight(.semibold))
+                Text("Beat Sync")
+                    .font(.caption2.weight(.semibold))
+            }
+            .padding(.vertical, 6)
+            .padding(.horizontal, 4)
+        }
+        .buttonStyle(.glass)
+        .disabled(!engine.canBeatSync)
+        .sensoryFeedback(.success, trigger: engine.beatSyncCount)
+        .accessibilityHint("Matches the tempo and lines up the beats of both channels")
     }
 }
 

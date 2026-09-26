@@ -42,9 +42,22 @@ final class SamplerEngine {
     var foldTargets: Set<FoldTarget> {
         didSet {
             UserDefaults.standard.set(foldTargets.map(\.rawValue), forKey: Keys.foldTargets)
+            // A target switched on starts from wherever the hinge is right now.
+            for target in foldTargets.subtracting(oldValue) {
+                baselines[target] = hinge?.angle
+            }
+            for target in oldValue.subtracting(foldTargets) {
+                baselines[target] = nil
+            }
             applyShape()
         }
     }
+
+    /// The hinge angle each target was switched on at. It has no effect there
+    /// and reaches full strength as the phone closes.
+    private var baselines: [FoldTarget: Angle] = [:]
+    /// Roughly where the hinge starts reporting closed; a target is fully bent by then.
+    private static let closedAngle = 45.0
 
     /// Fold amount set on screen, used whenever the hinge isn't bending the sound.
     var manualFold: Double = 0 {
@@ -61,13 +74,36 @@ final class SamplerEngine {
         hinge?.status == .partiallyOpen
     }
 
-    /// How folded the instrument is, from 0 (flat) to 1 (fully bent).
+    /// Whether the hinge, rather than the on-screen slider, sets the amounts.
+    private var isHingeDriving: Bool {
+        guard let hinge else { return false }
+        return hinge.status != .fullyOpen
+    }
+
+    /// How folded the phone is, from 0 (flat) to 1 (closed), for the gauge.
     var foldAmount: Double {
-        isHingeBending ? hingeFold : manualFold
+        isHingeDriving ? hingeFold : manualFold
+    }
+
+    /// How far a target is bent, from 0 to 1. With the hinge in play it grows
+    /// from the angle the target was switched on at, so switching one on
+    /// changes nothing until the phone moves.
+    func amount(for target: FoldTarget) -> Double {
+        guard foldTargets.contains(target) else { return 0 }
+        guard let hinge, isHingeDriving else { return manualFold }
+        guard let baseline = baselines[target] else { return 0 }
+        if hinge.status == .closed { return 1 }
+        let travel = max(baseline.degrees - Self.closedAngle, 1)
+        return min(max((baseline.degrees - hinge.angle.degrees) / travel, 0), 1)
     }
 
     var shape: SoundShape {
-        SoundShape(fold: foldAmount, targets: foldTargets)
+        SoundShape(
+            pitch: amount(for: .pitch),
+            stretch: amount(for: .stretch),
+            texture: amount(for: .texture),
+            filter: amount(for: .filter)
+        )
     }
 
     // MARK: Freezing
@@ -86,7 +122,7 @@ final class SamplerEngine {
     }
 
     private var isGrainAudible: Bool {
-        isFrozen || touchPosition != nil || (foldTargets.contains(.scrub) && foldAmount > 0.01)
+        isFrozen || touchPosition != nil || amount(for: .scrub) > 0.01
     }
 
     // MARK: DJ deck
@@ -222,7 +258,8 @@ final class SamplerEngine {
 
     // MARK: DJ deck
 
-    /// Renders the bundled tracks off the main thread and drops them into the library.
+    /// Renders the bundled tracks and decodes the bundled songs off the main
+    /// thread, dropping each into the library as it's ready.
     private func generateTracks() {
         Task.detached(priority: .userInitiated) { [weak self] in
             for track in Track.allCases {
@@ -236,6 +273,12 @@ final class SamplerEngine {
                     }
                 }
             }
+            for song in Song.allCases {
+                guard let decoded = try? song.makeSample() else { continue }
+                await MainActor.run {
+                    self?.library.append(decoded)
+                }
+            }
         }
     }
 
@@ -244,7 +287,7 @@ final class SamplerEngine {
         deck === deckA ? deckB : deckA
     }
 
-    /// Matches this deck's tempo to the other deck, widening its fader range if needed.
+    /// Matches this deck's tempo to the other deck.
     func sync(_ deck: Deck) {
         guard let target = partner(of: deck).effectiveBPM, deck.bpm != nil else { return }
         deck.setBPM(target)
@@ -252,6 +295,33 @@ final class SamplerEngine {
 
     func canSync(_ deck: Deck) -> Bool {
         deck.bpm != nil && partner(of: deck).bpm != nil
+    }
+
+    // MARK: Beat sync
+
+    /// Increments each time the decks are synced, so the button can confirm it.
+    private(set) var beatSyncCount = 0
+
+    var canBeatSync: Bool {
+        deckA.bpm != nil && deckB.bpm != nil
+    }
+
+    /// The deck that has been playing longest leads. The other takes its tempo
+    /// and drops its needle where the bars line up, starting if it was stopped.
+    func beatSync() {
+        guard canBeatSync else { return }
+        let playing = [deckA, deckB].filter(\.isPlaying)
+        let leader = playing.min { ($0.playStartedAt ?? .distantPast) < ($1.playStartedAt ?? .distantPast) } ?? deckA
+        let follower = partner(of: leader)
+        guard let target = leader.effectiveBPM else { return }
+        follower.setBPM(target)
+        if let phase = leader.barPhase, let position = follower.position(atBarPhase: phase) {
+            follower.turntable.cueRequest.store(Float(position), ordering: .relaxed)
+        }
+        if leader.isPlaying, !follower.isPlaying {
+            togglePlay(follower)
+        }
+        beatSyncCount += 1
     }
 
     func importAudio(from url: URL, onto deck: Deck?) {
@@ -353,11 +423,17 @@ final class SamplerEngine {
             openAngle = reading.angle
             hingeFold = 0
         case .closed:
-            hingeFold = 0
+            // Stay fully bent rather than snapping back once the hinge stops reporting angles.
+            hingeFold = 1
         case .partiallyOpen:
             // Measure distance from flat so the mapping holds whichever way the angle is reported.
             let bend = abs(openAngle.degrees - reading.angle.degrees)
-            hingeFold = min(max((bend - 5) / 85, 0), 1)
+            let travel = max(abs(openAngle.degrees - Self.closedAngle) - 5, 1)
+            hingeFold = min(max((bend - 5) / travel, 0), 1)
+            // Targets restored from last launch start from the first angle we see.
+            for target in foldTargets where baselines[target] == nil {
+                baselines[target] = reading.angle
+            }
         }
         applyShape()
     }
@@ -426,7 +502,14 @@ final class SamplerEngine {
             return
         }
         recordingCount += 1
-        let recording = Sample(name: "Recording \(recordingCount)", frames: prepared, kind: .recording)
+        let grid = BeatDetector.analyze(prepared, sampleRate: Sample.sampleRate)
+        let recording = Sample(
+            name: "Recording \(recordingCount)",
+            frames: prepared,
+            bpm: grid?.bpm,
+            beatOffset: grid?.firstBeat ?? 0,
+            kind: .recording
+        )
         library.insert(recording, at: 0)
         load(recording)
     }
@@ -521,8 +604,8 @@ final class SamplerEngine {
         let position: Double
         if let touchPosition {
             position = touchPosition
-        } else if foldTargets.contains(.scrub) && foldAmount > 0.01 {
-            position = trim.lowerBound + foldAmount * (trim.upperBound - trim.lowerBound)
+        } else if amount(for: .scrub) > 0.01 {
+            position = trim.lowerBound + amount(for: .scrub) * (trim.upperBound - trim.lowerBound)
         } else {
             position = trim.lowerBound + 0.001
         }

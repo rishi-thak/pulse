@@ -1,7 +1,8 @@
 import SwiftUI
 
-/// The second screen: the sample as a sheet of light that creases as you fold,
-/// with trim handles at its edges and a finger-hold that freezes the sound.
+/// The second screen: the sample as a sheet of light that recolours and
+/// reshapes as you fold, with trim handles at its edges and a finger-hold
+/// that freezes the sound.
 /// In deck mode a second sheet shows channel 2 beneath channel 1.
 struct VisualizerView: View {
     @Bindable var engine: SamplerEngine
