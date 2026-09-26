@@ -10,7 +10,7 @@ struct SamplerView: View {
         NavigationStack {
             stage
             .background(Color.black, ignoresSafeAreaEdges: .all)
-            .navigationTitle(engine.isRecording ? "Recording…" : engine.sample.name)
+            .navigationTitle(engine.isRecording ? "Recording…" : "Pulse")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar { toolbarContent }
         }
