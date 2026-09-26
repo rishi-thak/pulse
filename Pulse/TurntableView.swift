@@ -5,6 +5,8 @@ struct TurntableView: View {
     var engine: SamplerEngine
     @Bindable var deck: Deck
     @State private var isImporting = false
+    @State private var isSettingBPM = false
+    @State private var bpmText = ""
 
     var body: some View {
         VStack(spacing: 10) {
@@ -21,6 +23,34 @@ struct TurntableView: View {
                 engine.importAudio(from: url, onto: deck)
             }
         }
+        .alert("Set Tempo", isPresented: $isSettingBPM) {
+            TextField("BPM", text: $bpmText)
+                .keyboardType(.decimalPad)
+            Button("Set") {
+                if let value = Double(bpmText) {
+                    deck.setBPM(value)
+                }
+            }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text(bpmMessage)
+        }
+    }
+
+    /// Names the other channel and the tempo this one would take on.
+    private var matchTitle: String {
+        let partner = engine.partner(of: deck)
+        if let bpm = partner.effectiveBPM {
+            return "Match \(partner.slot.name) · \(Int(bpm.rounded())) BPM"
+        }
+        return "Match \(partner.slot.name)"
+    }
+
+    private var bpmMessage: String {
+        if let bpm = deck.bpm {
+            return "\(deck.sampleName) is \(Int(bpm.rounded())) BPM. The tempo fader moves to match, widening its range if it has to."
+        }
+        return "\(deck.sampleName) has no tempo yet. Enter one so it can be synced."
     }
 
     private var header: some View {
@@ -32,13 +62,6 @@ struct TurntableView: View {
                     .lineLimit(1)
                     .minimumScaleFactor(0.7)
                 Spacer(minLength: 0)
-                Button("Sync", systemImage: "metronome.fill") {
-                    engine.sync(deck)
-                }
-                .labelStyle(.iconOnly)
-                .disabled(!engine.canSync(deck))
-                .accessibilityHint("Matches this channel's tempo to the other channel")
-
                 LibraryMenu(engine: engine, title: "Load") { chosen in
                     engine.load(chosen, onto: deck)
                 } onImport: {
@@ -54,13 +77,29 @@ struct TurntableView: View {
                     .lineLimit(1)
                     .truncationMode(.tail)
                 Spacer(minLength: 0)
-                if let bpm = deck.effectiveBPM {
-                    Text("\(Int(bpm.rounded())) BPM")
-                        .monospacedDigit()
-                        .foregroundStyle(deck.slot.color)
-                        .contentTransition(.numericText())
-                        .fixedSize()
+                Menu {
+                    Button("Set Tempo…", systemImage: "number") {
+                        bpmText = deck.effectiveBPM.map { String(Int($0.rounded())) } ?? ""
+                        isSettingBPM = true
+                    }
+                    Button(matchTitle, systemImage: "metronome.fill") {
+                        engine.sync(deck)
+                    }
+                    .disabled(!engine.canSync(deck))
+                } label: {
+                    if let bpm = deck.effectiveBPM {
+                        Text("\(Int(bpm.rounded())) BPM")
+                            .monospacedDigit()
+                            .contentTransition(.numericText())
+                    } else {
+                        Text("Set BPM")
+                    }
                 }
+                .buttonStyle(.plain)
+                .foregroundStyle(deck.slot.color)
+                .fixedSize()
+                .accessibilityLabel("Tempo")
+                .accessibilityValue(deck.effectiveBPM.map { "\(Int($0.rounded())) beats per minute" } ?? "Unknown")
             }
             .font(.caption)
             .foregroundStyle(.secondary)
@@ -88,7 +127,7 @@ struct TurntableView: View {
             .tint(deck.slot.color)
             .labelStyle(.iconOnly)
 
-            Slider(value: $deck.tempo, in: -0.16...0.16) {
+            Slider(value: $deck.tempo, in: -deck.tempoRange.limit...deck.tempoRange.limit) {
                 Text("Tempo")
             } minimumValueLabel: {
                 Text("−")

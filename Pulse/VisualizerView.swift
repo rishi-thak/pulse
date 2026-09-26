@@ -10,7 +10,7 @@ struct VisualizerView: View {
     var body: some View {
         GeometryReader { proxy in
             let layout = StageLayout(size: proxy.size, isSplit: engine.isHingeBending)
-            let showsDecks = engine.prefersDeck || (layout.isSplit && layout.isWide)
+            let showsDecks = engine.showsDeck(in: layout)
             let full = layout.waveformRect
             let rowGap: CGFloat = 36
             let rowHeight = (full.height - rowGap) / 2

@@ -23,13 +23,13 @@ enum SamplerAlert: String, Identifiable {
     var message: String {
         switch self {
         case .microphoneDenied:
-            "Allow microphone access for Crease in Settings to record sounds."
+            "Allow microphone access for Pulse in Settings to record sounds."
         case .noMicrophone:
             "Connect a microphone or try again on a device with one."
         case .tooQuiet:
             "The recording was silent. Move closer to the sound and try again."
         case .audioUnavailable:
-            "Crease couldn't start audio. Close other audio apps and try again."
+            "Pulse couldn't start audio. Close other audio apps and try again."
         case .importFailed:
             "That file couldn't be read as audio. Try an MP3, M4A, WAV, or AIFF."
         }

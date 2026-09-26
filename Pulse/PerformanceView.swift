@@ -7,8 +7,9 @@ struct PerformanceView: View {
     var body: some View {
         GeometryReader { proxy in
             let layout = StageLayout(size: proxy.size, isSplit: engine.isHingeBending)
+            let showsDeck = engine.showsDeck(in: layout)
             let controls = Group {
-                if engine.prefersDeck || (layout.isSplit && layout.isWide) {
+                if showsDeck {
                     // Laptop pose, or the deck asked for outright: two turntables on the flat half.
                     DeckView(engine: engine)
                 } else if layout.isSplit && layout.isWide {
@@ -28,16 +29,21 @@ struct PerformanceView: View {
             .padding(StageLayout.margin)
             .frame(width: layout.controlsSize.width, height: layout.controlsSize.height, alignment: .bottom)
 
-            if layout.isWide {
-                HStack(spacing: 0) {
-                    Spacer(minLength: 0)
-                    controls
+            Group {
+                if layout.isWide {
+                    HStack(spacing: 0) {
+                        Spacer(minLength: 0)
+                        controls
+                    }
+                } else {
+                    VStack(spacing: 0) {
+                        Spacer(minLength: 0)
+                        controls
+                    }
                 }
-            } else {
-                VStack(spacing: 0) {
-                    Spacer(minLength: 0)
-                    controls
-                }
+            }
+            .onChange(of: showsDeck, initial: true) { _, isShowing in
+                engine.isDeckShowing = isShowing
             }
         }
     }

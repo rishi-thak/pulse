@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct CreaseApp: App {
+struct PulseApp: App {
     @State private var engine = SamplerEngine()
 
     var body: some Scene {

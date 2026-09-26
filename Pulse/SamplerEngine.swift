@@ -70,10 +70,7 @@ final class SamplerEngine {
         SoundShape(fold: foldAmount, targets: foldTargets)
     }
 
-    // MARK: Looping and freezing
-
-    /// Whether the whole trimmed sample is playing on repeat.
-    private(set) var isLooping = false
+    // MARK: Freezing
 
     /// Whether the grain cloud is held on, independent of touch or fold.
     var isFrozen = false {
@@ -106,6 +103,15 @@ final class SamplerEngine {
         didSet { UserDefaults.standard.set(prefersDeck, forKey: Keys.prefersDeck) }
     }
 
+    /// Whether both turntables are on screen for this layout.
+    func showsDeck(in layout: StageLayout) -> Bool {
+        prefersDeck || (layout.isSplit && layout.isWide)
+    }
+
+    /// Set by the stage as it lays out, so the toolbar can drop the transport
+    /// controls each turntable already carries.
+    var isDeckShowing = false
+
     // MARK: Recording
 
     private(set) var isRecording = false
@@ -125,10 +131,6 @@ final class SamplerEngine {
     private let filter = AVAudioUnitEQ(numberOfBands: 1)
     private let reverb = AVAudioUnitReverb()
     private let voices = (0..<10).map { _ in Voice() }
-    /// Plays the whole sample on repeat, separate from the pad voices.
-    private let loopVoice = Voice()
-    private var loopBuffer: AVAudioPCMBuffer?
-    private var loopRestartTask: Task<Void, Never>?
     private let grainCloud = GrainCloud()
     private var grainNode: AVAudioSourceNode?
     private var deckNodes: [AVAudioSourceNode] = []
@@ -202,9 +204,6 @@ final class SamplerEngine {
             guard let padIndex = voice.padIndex, let progress = voice.progress else { return nil }
             return Playhead(id: offset, source: .pad(padIndex), position: position(of: voice, at: progress))
         }
-        if isLooping, let progress = loopVoice.progress {
-            result.append(Playhead(id: -1, source: .loop, position: position(of: loopVoice, at: progress)))
-        }
         if let grainPosition {
             result.append(Playhead(id: -2, source: .grain, position: grainPosition))
         }
@@ -219,46 +218,6 @@ final class SamplerEngine {
         let region = voice.region
         let travelled = (region.upperBound - region.lowerBound) * progress
         return voice.isReversed ? region.upperBound - travelled : region.lowerBound + travelled
-    }
-
-    func toggleLoop() {
-        if isLooping {
-            stopLoop()
-        } else {
-            startLoop()
-        }
-    }
-
-    private func startLoop() {
-        guard let loopBuffer else { return }
-        startEngine()
-        loopVoice.stop()
-        loopVoice.isLooping = true
-        loopVoice.frameCount = loopBuffer.frameLength
-        loopVoice.region = trim
-        loopVoice.isReversed = isReversed
-        loopVoice.apply(shape)
-        loopVoice.player.scheduleBuffer(loopBuffer, at: nil, options: .loops)
-        loopVoice.player.play()
-        isLooping = true
-    }
-
-    private func stopLoop() {
-        loopRestartTask?.cancel()
-        loopVoice.stop()
-        isLooping = false
-    }
-
-    /// Picks up trim, reverse, and sample changes. Waits briefly so dragging
-    /// a trim handle doesn't restart the loop on every frame.
-    private func restartLoopSoon() {
-        guard isLooping else { return }
-        loopRestartTask?.cancel()
-        loopRestartTask = Task { [weak self] in
-            try? await Task.sleep(for: .milliseconds(150))
-            guard !Task.isCancelled, let self, self.isLooping else { return }
-            self.startLoop()
-        }
     }
 
     // MARK: DJ deck
@@ -280,17 +239,19 @@ final class SamplerEngine {
         }
     }
 
-    /// Matches this deck's tempo to the other deck, within the fader's range.
+    /// The deck on the other side of the mixer.
+    func partner(of deck: Deck) -> Deck {
+        deck === deckA ? deckB : deckA
+    }
+
+    /// Matches this deck's tempo to the other deck, widening its fader range if needed.
     func sync(_ deck: Deck) {
-        let other = deck === deckA ? deckB : deckA
-        guard let target = other.effectiveBPM, let bpm = deck.bpm, bpm > 0 else { return }
-        deck.tempo = min(max(target / bpm - 1, -0.16), 0.16)
-        applyDeckRates()
+        guard let target = partner(of: deck).effectiveBPM, deck.bpm != nil else { return }
+        deck.setBPM(target)
     }
 
     func canSync(_ deck: Deck) -> Bool {
-        let other = deck === deckA ? deckB : deckA
-        return deck.bpm != nil && other.bpm != nil
+        deck.bpm != nil && partner(of: deck).bpm != nil
     }
 
     func importAudio(from url: URL, onto deck: Deck?) {
@@ -311,7 +272,6 @@ final class SamplerEngine {
     func togglePlay(_ deck: Deck) {
         deck.isPlaying.toggle()
         if deck.isPlaying { startEngine() }
-        applyDeckRates()
     }
 
     func cue(_ deck: Deck) {
@@ -343,9 +303,7 @@ final class SamplerEngine {
         let shape = shape
         let bend = pow(2, shape.pitchCents / 1200) * shape.rate
         for deck in [deckA, deckB] {
-            let direction: Float = deck === deckA && isReversed ? -1 : 1
-            let motor = deck.isPlaying ? Float(1 + deck.tempo) * bend * direction : 0
-            deck.turntable.motorRate.store(motor, ordering: .relaxed)
+            deck.drive(bend: bend, direction: deck === deckA && isReversed ? -1 : 1)
         }
     }
 
@@ -408,7 +366,6 @@ final class SamplerEngine {
 
     private func startRecording() async {
         // Keep the app's own sound out of the microphone.
-        stopLoop()
         isFrozen = false
         for deck in [deckA, deckB] where deck.isPlaying {
             togglePlay(deck)
@@ -495,7 +452,7 @@ final class SamplerEngine {
 
     private func buildGraph() {
         [submix, distortion, filter, reverb].forEach(engine.attach)
-        for voice in voices + [loopVoice] {
+        for voice in voices {
             engine.attach(voice.player)
             engine.attach(voice.timePitch)
             engine.connect(voice.player, to: voice.timePitch, format: format)
@@ -541,7 +498,6 @@ final class SamplerEngine {
     private func applyShape() {
         let shape = shape
         voices.forEach { $0.apply(shape) }
-        loopVoice.apply(shape)
         distortion.wetDryMix = shape.texture * 65
         reverb.wetDryMix = shape.texture * 40
         filter.bands[0].frequency = shape.cutoff
@@ -618,8 +574,6 @@ final class SamplerEngine {
 
         pads = newPads
         padBuffers = buffers
-        loopBuffer = makeBuffer(from: region)
-        restartLoopSoon()
         updateGrains()
         syncDeckA()
     }

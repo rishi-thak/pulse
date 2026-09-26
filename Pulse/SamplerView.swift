@@ -63,15 +63,21 @@ struct SamplerView: View {
 
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
-        ToolbarItem(placement: .primaryAction) {
-            Button(
-                engine.isLooping ? "Stop Loop" : "Play Loop",
-                systemImage: engine.isLooping ? "stop.fill" : "play.fill"
-            ) {
-                engine.toggleLoop()
+        // The turntables carry their own transport, so this only shows without them.
+        if !engine.isDeckShowing {
+            ToolbarItem(placement: .primaryAction) {
+                Toggle(
+                    engine.deckA.isPlaying ? "Pause" : "Play",
+                    systemImage: engine.deckA.isPlaying ? "pause.fill" : "play.fill",
+                    isOn: Binding(
+                        get: { engine.deckA.isPlaying },
+                        set: { _ in engine.togglePlay(engine.deckA) }
+                    )
+                )
+                .toggleStyle(.button)
+                .buttonStyle(.glassProminent)
+                .disabled(engine.isRecording)
             }
-            .buttonStyle(.glassProminent)
-            .disabled(engine.isRecording)
         }
 
         ToolbarItem(placement: .primaryAction) {

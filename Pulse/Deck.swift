@@ -46,9 +46,20 @@ final class Deck {
     private(set) var peaks: [Float]
     private(set) var duration: Double
     private(set) var bpm: Double?
-    var isPlaying = false
+    var isPlaying = false {
+        didSet { updateMotor() }
+    }
     /// Speed offset like a tempo fader: −0.16 is 16% slower, 0.16 is 16% faster.
-    var tempo: Double = 0
+    var tempo: Double = 0 {
+        didSet { updateMotor() }
+    }
+    var tempoRange: TempoRange = .standard {
+        didSet { tempo = min(max(tempo, -tempoRange.limit), tempoRange.limit) }
+    }
+    /// The fold's pitch and stretch bend, applied on top of the fader.
+    private var bend: Float = 1
+    /// 1 forwards, −1 when the sample is reversed.
+    private var direction: Float = 1
     /// Channel fader, from silent to full.
     var level: Double = 1 {
         didSet { turntable.gain.store(Float(level), ordering: .relaxed) }
@@ -74,6 +85,33 @@ final class Deck {
     /// Tempo after the fader, when the track's tempo is known.
     var effectiveBPM: Double? {
         bpm.map { $0 * (1 + tempo) }
+    }
+
+    /// Moves the tempo fader so the track plays at this tempo, widening the
+    /// range if it has to. A track with no tempo yet is tagged with it instead.
+    func setBPM(_ target: Double) {
+        guard target > 0 else { return }
+        guard let bpm, bpm > 0 else {
+            self.bpm = target
+            return
+        }
+        let wanted = target / bpm - 1
+        if let range = TempoRange.fitting(wanted), range.limit > tempoRange.limit {
+            tempoRange = range
+        }
+        tempo = min(max(wanted, -tempoRange.limit), tempoRange.limit)
+    }
+
+    /// Takes the engine's fold bend and play direction, then respins the motor.
+    func drive(bend: Float, direction: Float) {
+        self.bend = bend
+        self.direction = direction
+        updateMotor()
+    }
+
+    private func updateMotor() {
+        let motor = isPlaying ? Float(1 + tempo) * bend * direction : 0
+        turntable.motorRate.store(motor, ordering: .relaxed)
     }
 
     /// Where the needle is, as a fraction of the sample.
