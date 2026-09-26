@@ -30,7 +30,7 @@ struct FoldPanel: View {
                 }
             }
 
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 52), spacing: 6)], spacing: 6) {
+            CenteredGrid(minimumItemWidth: 52, spacing: 6) {
                 ForEach(FoldTarget.allCases) { target in
                     targetToggle(target)
                 }
@@ -74,9 +74,9 @@ struct FoldPanel: View {
             }
         )
         return Toggle(isOn: isOn) {
-            VStack(spacing: 3) {
+            VStack(spacing: 2) {
                 Image(systemName: target.systemImage)
-                    .font(.body)
+                    .font(.footnote)
                 Text(target.title)
                     .font(.caption2.weight(.semibold))
                     .lineLimit(1)
@@ -89,10 +89,11 @@ struct FoldPanel: View {
                     .opacity(isOn.wrappedValue ? 0.9 : 0.6)
             }
             .frame(maxWidth: .infinity)
-            .padding(.vertical, 4)
+            .padding(.vertical, 2)
         }
         .toggleStyle(.button)
         .buttonStyle(.bordered)
+        .controlSize(.small)
         .tint(isOn.wrappedValue ? Color.accentColor : .gray)
         .accessibilityHint(target.summary)
     }
@@ -138,5 +139,56 @@ private struct HingeGauge: View {
             context.stroke(leaves, with: .color(.white), style: StrokeStyle(lineWidth: 2.5, lineCap: .round, lineJoin: .round))
         }
         .accessibilityHidden(true)
+    }
+}
+
+/// Equal-width cells that wrap into rows, with a short last row centered instead of left-aligned.
+private struct CenteredGrid: Layout {
+    var minimumItemWidth: CGFloat
+    var spacing: CGFloat
+
+    func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
+        let width = proposal.width ?? CGFloat(subviews.count) * (minimumItemWidth + spacing) - spacing
+        let rows = rows(for: subviews, width: width)
+        let height = rows.map(\.height).reduce(0, +) + spacing * CGFloat(max(rows.count - 1, 0))
+        return CGSize(width: width, height: height)
+    }
+
+    func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
+        let itemWidth = itemWidth(for: bounds.width, count: subviews.count)
+        var y = bounds.minY
+        for row in rows(for: subviews, width: bounds.width) {
+            let rowWidth = CGFloat(row.indices.count) * (itemWidth + spacing) - spacing
+            var x = bounds.minX + (bounds.width - rowWidth) / 2
+            for index in row.indices {
+                subviews[index].place(
+                    at: CGPoint(x: x, y: y),
+                    proposal: ProposedViewSize(width: itemWidth, height: row.height)
+                )
+                x += itemWidth + spacing
+            }
+            y += row.height + spacing
+        }
+    }
+
+    private func columns(for width: CGFloat, count: Int) -> Int {
+        max(1, min(count, Int((width + spacing) / (minimumItemWidth + spacing))))
+    }
+
+    private func itemWidth(for width: CGFloat, count: Int) -> CGFloat {
+        let columns = CGFloat(columns(for: width, count: count))
+        return (width - spacing * (columns - 1)) / columns
+    }
+
+    private func rows(for subviews: Subviews, width: CGFloat) -> [(indices: Range<Int>, height: CGFloat)] {
+        let columns = columns(for: width, count: subviews.count)
+        let itemWidth = itemWidth(for: width, count: subviews.count)
+        return stride(from: 0, to: subviews.count, by: columns).map { start in
+            let indices = start..<min(start + columns, subviews.count)
+            let height = indices
+                .map { subviews[$0].sizeThatFits(ProposedViewSize(width: itemWidth, height: nil)).height }
+                .max() ?? 0
+            return (indices, height)
+        }
     }
 }

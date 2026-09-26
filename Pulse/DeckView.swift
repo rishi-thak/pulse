@@ -3,6 +3,8 @@ import SwiftUI
 /// Two turntables with a mixer between them: the flat half of the phone in laptop pose.
 struct DeckView: View {
     @Bindable var engine: SamplerEngine
+    /// How tall the mixer grows beside the turntables, matching the fold panel's full-size height.
+    @ScaledMetric private var mixerHeight: CGFloat = 228
 
     var body: some View {
         GeometryReader { proxy in
@@ -14,6 +16,7 @@ struct DeckView: View {
                         FoldPanel(engine: engine)
                             .fixedSize(horizontal: false, vertical: true)
                         MixerView(engine: engine, axis: .vertical)
+                            .frame(maxHeight: mixerHeight)
                     }
                     .frame(width: min(max(proxy.size.width * 0.34, 224), 280))
                     TurntableView(engine: engine, deck: engine.deckB)
