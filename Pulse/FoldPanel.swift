@@ -14,9 +14,11 @@ struct FoldPanel: View {
                     Text(statusTitle)
                         .font(.subheadline.weight(.semibold))
                         .contentTransition(.numericText())
-                    Text(statusDetail)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+                    if let statusDetail {
+                        Text(statusDetail)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
                 }
                 .animation(.smooth(duration: 0.2), value: statusTitle)
 
@@ -51,14 +53,13 @@ struct FoldPanel: View {
         }
     }
 
-    private var statusDetail: String {
-        let active = FoldTarget.allCases.filter { engine.foldTargets.contains($0) }
-        if active.isEmpty { return "Pick what the fold bends" }
+    /// A hint for getting started; nothing while bending, since the buttons already show what's on.
+    private var statusDetail: String? {
         guard let hinge = engine.hinge else { return "Slide, or fold the phone" }
         switch hinge.status {
         case .closed: return "Open the phone to play"
         case .fullyOpen: return "Fold the phone to bend"
-        case .partiallyOpen: return active.map(\.title).joined(separator: " · ")
+        case .partiallyOpen: return nil
         }
     }
 
