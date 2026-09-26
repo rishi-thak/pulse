@@ -381,7 +381,7 @@ final class SamplerEngine {
         let shape = shape
         let bend = pow(2, shape.pitchCents / 1200) * shape.rate
         for deck in [deckA, deckB] {
-            deck.drive(bend: bend, direction: deck === deckA && isReversed ? -1 : 1)
+            deck.drive(bend: bend, direction: isReversed ? -1 : 1)
         }
     }
 
