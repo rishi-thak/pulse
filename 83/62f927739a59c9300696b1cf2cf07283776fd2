@@ -1,0 +1,296 @@
+.agents/skills/ask-matt/PHASE-BOUNDARIES.md
+  h_83bc5aaa251b9b 1-55
+.agents/skills/ask-matt/SKILL.md
+  h_83bc5aaa251b9b 1-90
+.agents/skills/ask-matt/agents/openai.yaml
+  h_83bc5aaa251b9b 1-5
+.agents/skills/claude-handoff/SKILL.md
+  h_83bc5aaa251b9b 1-18
+.agents/skills/claude-handoff/agents/openai.yaml
+  h_83bc5aaa251b9b 1-5
+.agents/skills/code-review/SKILL.md
+  h_83bc5aaa251b9b 1-87
+.agents/skills/code-review/agents/openai.yaml
+  h_83bc5aaa251b9b 1-3
+.agents/skills/codebase-design/DEEPENING.md
+  h_83bc5aaa251b9b 1-37
+.agents/skills/codebase-design/DESIGN-IT-TWICE.md
+  h_83bc5aaa251b9b 1-44
+.agents/skills/codebase-design/SKILL.md
+  h_83bc5aaa251b9b 1-114
+.agents/skills/codebase-design/agents/openai.yaml
+  h_83bc5aaa251b9b 1-3
+.agents/skills/diagnosing-bugs/SKILL.md
+  h_83bc5aaa251b9b 1-138
+.agents/skills/diagnosing-bugs/agents/openai.yaml
+  h_83bc5aaa251b9b 1-3
+.agents/skills/diagnosing-bugs/scripts/hitl-loop.template.sh
+  h_83bc5aaa251b9b 1-44
+.agents/skills/domain-modeling/ADR-FORMAT.md
+  h_83bc5aaa251b9b 1-47
+.agents/skills/domain-modeling/CONTEXT-FORMAT.md
+  h_83bc5aaa251b9b 1-60
+.agents/skills/domain-modeling/SKILL.md
+  h_83bc5aaa251b9b 1-74
+.agents/skills/domain-modeling/agents/openai.yaml
+  h_83bc5aaa251b9b 1-3
+.agents/skills/git-guardrails-claude-code/SKILL.md
+  h_83bc5aaa251b9b 1-95
+.agents/skills/git-guardrails-claude-code/agents/openai.yaml
+  h_83bc5aaa251b9b 1-3
+.agents/skills/git-guardrails-claude-code/scripts/block-dangerous-git.sh
+  h_83bc5aaa251b9b 1-25
+.agents/skills/grill-me/SKILL.md
+  h_83bc5aaa251b9b 1-7
+.agents/skills/grill-me/agents/openai.yaml
+  h_83bc5aaa251b9b 1-5
+.agents/skills/grill-with-docs/SKILL.md
+  h_83bc5aaa251b9b 1-7
+.agents/skills/grill-with-docs/agents/openai.yaml
+  h_83bc5aaa251b9b 1-5
+.agents/skills/grilling/SKILL.md
+  h_83bc5aaa251b9b 1-28
+.agents/skills/grilling/agents/openai.yaml
+  h_83bc5aaa251b9b 1-3
+.agents/skills/handoff/SKILL.md
+  h_83bc5aaa251b9b 1-16
+.agents/skills/handoff/agents/openai.yaml
+  h_83bc5aaa251b9b 1-5
+.agents/skills/implement-spec/SKILL.md
+  h_83bc5aaa251b9b 1-35
+.agents/skills/implement-spec/agents/openai.yaml
+  h_83bc5aaa251b9b 1-5
+.agents/skills/implement/SKILL.md
+  h_83bc5aaa251b9b 1-15
+.agents/skills/implement/agents/openai.yaml
+  h_83bc5aaa251b9b 1-5
+.agents/skills/improve-codebase-architecture/HTML-REPORT.md
+  h_83bc5aaa251b9b 1-123
+.agents/skills/improve-codebase-architecture/SKILL.md
+  h_83bc5aaa251b9b 1-71
+.agents/skills/improve-codebase-architecture/agents/openai.yaml
+  h_83bc5aaa251b9b 1-5
+.agents/skills/loop-me/SKILL.md
+  h_83bc5aaa251b9b 1-32
+.agents/skills/loop-me/agents/openai.yaml
+  h_83bc5aaa251b9b 1-5
+.agents/skills/migrate-to-shoehorn/SKILL.md
+  h_83bc5aaa251b9b 1-118
+.agents/skills/migrate-to-shoehorn/agents/openai.yaml
+  h_83bc5aaa251b9b 1-3
+.agents/skills/pr/CREDITS.md
+  h_83bc5aaa251b9b 1-3
+.agents/skills/pr/SKILL.md
+  h_83bc5aaa251b9b 1-168
+.agents/skills/pr/agents/openai.yaml
+  h_83bc5aaa251b9b 1-3
+.agents/skills/prototype/LOGIC.md
+  h_83bc5aaa251b9b 1-67
+.agents/skills/prototype/SKILL.md
+  h_83bc5aaa251b9b 1-26
+.agents/skills/prototype/UI.md
+  h_83bc5aaa251b9b 1-112
+.agents/skills/prototype/agents/openai.yaml
+  h_83bc5aaa251b9b 1-3
+.agents/skills/research/SKILL.md
+  h_83bc5aaa251b9b 1-12
+.agents/skills/research/agents/openai.yaml
+  h_83bc5aaa251b9b 1-3
+.agents/skills/resolving-merge-conflicts/SKILL.md
+  h_83bc5aaa251b9b 1-14
+.agents/skills/resolving-merge-conflicts/agents/openai.yaml
+  h_83bc5aaa251b9b 1-3
+.agents/skills/retro/SKILL.md
+  h_83bc5aaa251b9b 1-44
+.agents/skills/retro/agents/openai.yaml
+  h_83bc5aaa251b9b 1-5
+.agents/skills/scaffold-exercises/SKILL.md
+  h_83bc5aaa251b9b 1-106
+.agents/skills/scaffold-exercises/agents/openai.yaml
+  h_83bc5aaa251b9b 1-3
+.agents/skills/setup-matt-pocock-skills/SKILL.md
+  h_83bc5aaa251b9b 1-116
+.agents/skills/setup-matt-pocock-skills/agents/openai.yaml
+  h_83bc5aaa251b9b 1-5
+.agents/skills/setup-matt-pocock-skills/domain.md
+  h_83bc5aaa251b9b 1-51
+.agents/skills/setup-matt-pocock-skills/issue-tracker-github.md
+  h_83bc5aaa251b9b 1-45
+.agents/skills/setup-matt-pocock-skills/issue-tracker-gitlab.md
+  h_83bc5aaa251b9b 1-46
+.agents/skills/setup-matt-pocock-skills/issue-tracker-local.md
+  h_83bc5aaa251b9b 1-30
+.agents/skills/setup-matt-pocock-skills/triage-labels.md
+  h_83bc5aaa251b9b 1-15
+.agents/skills/setup-pre-commit/SKILL.md
+  h_83bc5aaa251b9b 1-91
+.agents/skills/setup-pre-commit/agents/openai.yaml
+  h_83bc5aaa251b9b 1-3
+.agents/skills/setup-ts-deep-modules/SKILL.md
+  h_83bc5aaa251b9b 1-102
+.agents/skills/setup-ts-deep-modules/agents/openai.yaml
+  h_83bc5aaa251b9b 1-5
+.agents/skills/setup-ts-deep-modules/dependency-cruiser.config.cjs
+  h_83bc5aaa251b9b 1-95
+.agents/skills/tdd/SKILL.md
+  h_83bc5aaa251b9b 1-38
+.agents/skills/tdd/agents/openai.yaml
+  h_83bc5aaa251b9b 1-3
+.agents/skills/tdd/mocking.md
+  h_83bc5aaa251b9b 1-59
+.agents/skills/tdd/tests.md
+  h_83bc5aaa251b9b 1-77
+.agents/skills/teach/GLOSSARY-FORMAT.md
+  h_83bc5aaa251b9b 1-35
+.agents/skills/teach/LEARNING-RECORD-FORMAT.md
+  h_83bc5aaa251b9b 1-46
+.agents/skills/teach/MISSION-FORMAT.md
+  h_83bc5aaa251b9b 1-31
+.agents/skills/teach/RESOURCES-FORMAT.md
+  h_83bc5aaa251b9b 1-32
+.agents/skills/teach/SKILL.md
+  h_83bc5aaa251b9b 1-140
+.agents/skills/teach/agents/openai.yaml
+  h_83bc5aaa251b9b 1-5
+.agents/skills/to-questionnaire/SKILL.md
+  h_83bc5aaa251b9b 1-54
+.agents/skills/to-questionnaire/agents/openai.yaml
+  h_83bc5aaa251b9b 1-5
+.agents/skills/to-spec/SKILL.md
+  h_83bc5aaa251b9b 1-75
+.agents/skills/to-spec/agents/openai.yaml
+  h_83bc5aaa251b9b 1-5
+.agents/skills/to-tickets/SKILL.md
+  h_83bc5aaa251b9b 1-105
+.agents/skills/to-tickets/agents/openai.yaml
+  h_83bc5aaa251b9b 1-5
+.agents/skills/triage/AGENT-BRIEF.md
+  h_83bc5aaa251b9b 1-207
+.agents/skills/triage/OUT-OF-SCOPE.md
+  h_83bc5aaa251b9b 1-105
+.agents/skills/triage/SKILL.md
+  h_83bc5aaa251b9b 1-112
+.agents/skills/triage/agents/openai.yaml
+  h_83bc5aaa251b9b 1-5
+.agents/skills/wait-what/SKILL.md
+  h_83bc5aaa251b9b 1-7
+.agents/skills/wait-what/agents/openai.yaml
+  h_83bc5aaa251b9b 1-5
+.agents/skills/wayfinder/SKILL.md
+  h_83bc5aaa251b9b 1-128
+.agents/skills/wayfinder/agents/openai.yaml
+  h_83bc5aaa251b9b 1-5
+.agents/skills/wizard/SKILL.md
+  h_83bc5aaa251b9b 1-44
+.agents/skills/wizard/agents/openai.yaml
+  h_83bc5aaa251b9b 1-3
+.agents/skills/wizard/template.sh
+  h_83bc5aaa251b9b 1-204
+.agents/skills/writing-beats/SKILL.md
+  h_83bc5aaa251b9b 1-67
+.agents/skills/writing-beats/agents/openai.yaml
+  h_83bc5aaa251b9b 1-5
+.agents/skills/writing-for-agents/SKILL-MECHANICS.md
+  h_83bc5aaa251b9b 1-22
+.agents/skills/writing-for-agents/SKILL.md
+  h_83bc5aaa251b9b 1-81
+.agents/skills/writing-for-agents/agents/openai.yaml
+  h_83bc5aaa251b9b 1-3
+.agents/skills/writing-fragments/SKILL.md
+  h_83bc5aaa251b9b 1-79
+.agents/skills/writing-fragments/agents/openai.yaml
+  h_83bc5aaa251b9b 1-5
+.agents/skills/writing-shape/SKILL.md
+  h_83bc5aaa251b9b 1-79
+.agents/skills/writing-shape/agents/openai.yaml
+  h_83bc5aaa251b9b 1-5
+.claude/skills/ask-matt
+  h_83bc5aaa251b9b 1
+.claude/skills/claude-handoff
+  h_83bc5aaa251b9b 1
+.claude/skills/code-review
+  h_83bc5aaa251b9b 1
+.claude/skills/codebase-design
+  h_83bc5aaa251b9b 1
+.claude/skills/diagnosing-bugs
+  h_83bc5aaa251b9b 1
+.claude/skills/domain-modeling
+  h_83bc5aaa251b9b 1
+.claude/skills/git-guardrails-claude-code
+  h_83bc5aaa251b9b 1
+.claude/skills/grill-me
+  h_83bc5aaa251b9b 1
+.claude/skills/grill-with-docs
+  h_83bc5aaa251b9b 1
+.claude/skills/grilling
+  h_83bc5aaa251b9b 1
+.claude/skills/handoff
+  h_83bc5aaa251b9b 1
+.claude/skills/implement
+  h_83bc5aaa251b9b 1
+.claude/skills/implement-spec
+  h_83bc5aaa251b9b 1
+.claude/skills/improve-codebase-architecture
+  h_83bc5aaa251b9b 1
+.claude/skills/loop-me
+  h_83bc5aaa251b9b 1
+.claude/skills/migrate-to-shoehorn
+  h_83bc5aaa251b9b 1
+.claude/skills/pr
+  h_83bc5aaa251b9b 1
+.claude/skills/prototype
+  h_83bc5aaa251b9b 1
+.claude/skills/research
+  h_83bc5aaa251b9b 1
+.claude/skills/resolving-merge-conflicts
+  h_83bc5aaa251b9b 1
+.claude/skills/retro
+  h_83bc5aaa251b9b 1
+.claude/skills/scaffold-exercises
+  h_83bc5aaa251b9b 1
+.claude/skills/setup-matt-pocock-skills
+  h_83bc5aaa251b9b 1
+.claude/skills/setup-pre-commit
+  h_83bc5aaa251b9b 1
+.claude/skills/setup-ts-deep-modules
+  h_83bc5aaa251b9b 1
+.claude/skills/tdd
+  h_83bc5aaa251b9b 1
+.claude/skills/teach
+  h_83bc5aaa251b9b 1
+.claude/skills/to-questionnaire
+  h_83bc5aaa251b9b 1
+.claude/skills/to-spec
+  h_83bc5aaa251b9b 1
+.claude/skills/to-tickets
+  h_83bc5aaa251b9b 1
+.claude/skills/triage
+  h_83bc5aaa251b9b 1
+.claude/skills/wait-what
+  h_83bc5aaa251b9b 1
+.claude/skills/wayfinder
+  h_83bc5aaa251b9b 1
+.claude/skills/wizard
+  h_83bc5aaa251b9b 1
+.claude/skills/writing-beats
+  h_83bc5aaa251b9b 1
+.claude/skills/writing-for-agents
+  h_83bc5aaa251b9b 1
+.claude/skills/writing-fragments
+  h_83bc5aaa251b9b 1
+.claude/skills/writing-shape
+  h_83bc5aaa251b9b 1
+skills-lock.json
+  h_83bc5aaa251b9b 1-233
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "8362f927739a59c9300696b1cf2cf07283776fd2",
+  "prompts": {},
+  "humans": {
+    "h_83bc5aaa251b9b": {
+      "author": "Evan Taylor <eltaylor1104@gmail.com>"
+    }
+  }
+}
