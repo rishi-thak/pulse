@@ -1,0 +1,27 @@
+Pulse/SamplerEngine.swift
+  s_c991586326084c::t_0a7762125f0752 277-284,477-479
+Pulse/Deck.swift
+  s_c991586326084c::t_0a7762125f0752 1-2,51-57,84-91,100-138
+Pulse/TurntableView.swift
+  s_c991586326084c::t_0a7762125f0752 8,17,23-25,45-67,93-94
+Pulse/Turntable.swift
+  s_c991586326084c::t_0a7762125f0752 84
+Pulse/DeckEQView.swift
+  s_c991586326084c::t_0a7762125f0752 1-39
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "3a4f2b5c3fec949480656e22fe50cd8b140892fe",
+  "prompts": {},
+  "sessions": {
+    "s_c991586326084c": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0df68-cbc1-7dc2-93f7-1bdefd56ecae",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "Evan Taylor <eltaylor1104@gmail.com>"
+    }
+  }
+}
