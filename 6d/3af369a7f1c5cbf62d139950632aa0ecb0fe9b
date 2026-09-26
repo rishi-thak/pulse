@@ -1,0 +1,440 @@
+.claude/skills/emil-animations/SKILL.md
+  h_83bc5aaa251b9b 1-126
+.claude/skills/emil-animations/patterns.md
+  h_83bc5aaa251b9b 1-185
+.claude/skills/emil-animations/techniques.md
+  h_83bc5aaa251b9b 1-155
+.claude/skills/emil-ask-emil/SKILL.md
+  h_83bc5aaa251b9b 1-115
+.claude/skills/emil-ask-lapse/AGENTS.md
+  h_83bc5aaa251b9b 1-126
+.claude/skills/emil-ask-lapse/API.md
+  h_83bc5aaa251b9b 1-182
+.claude/skills/emil-ask-lapse/SKILL.md
+  h_83bc5aaa251b9b 1-203
+.claude/skills/emil-ask-lapse/TROUBLESHOOTING.md
+  h_83bc5aaa251b9b 1-87
+.claude/skills/emil-borrow-a-brain/SKILL.md
+  h_83bc5aaa251b9b 1-94
+.claude/skills/emil-borrow-a-brain/templates.md
+  h_83bc5aaa251b9b 1-152
+.claude/skills/emil-build-a-tool/SKILL.md
+  h_83bc5aaa251b9b 1-92
+.claude/skills/emil-color/SKILL.md
+  h_83bc5aaa251b9b 1-77
+.claude/skills/emil-color/building-scales.md
+  h_83bc5aaa251b9b 1-87
+.claude/skills/emil-color/contrast.md
+  h_83bc5aaa251b9b 1-52
+.claude/skills/emil-color/converting-colors.md
+  h_83bc5aaa251b9b 1-55
+.claude/skills/emil-color/gamut-p3-tailwind.md
+  h_83bc5aaa251b9b 1-98
+.claude/skills/emil-component-design/SKILL.md
+  h_83bc5aaa251b9b 1-231
+.claude/skills/emil-component-design/implementation.md
+  h_83bc5aaa251b9b 1-181
+.claude/skills/emil-design-foundations/SKILL.md
+  h_83bc5aaa251b9b 1-177
+.claude/skills/emil-design-foundations/icons-and-illustrations.md
+  h_83bc5aaa251b9b 1-35
+.claude/skills/emil-design-system-docs/SKILL.md
+  h_83bc5aaa251b9b 1-97
+.claude/skills/emil-design-vocabulary/SKILL.md
+  h_83bc5aaa251b9b 1-143
+.claude/skills/emil-design-vocabulary/terms-index.md
+  h_83bc5aaa251b9b 1-42
+.claude/skills/emil-design-vocabulary/vocabulary.md
+  h_83bc5aaa251b9b 1-361
+.claude/skills/emil-engineering-vocabulary/SKILL.md
+  h_83bc5aaa251b9b 1-144
+.claude/skills/emil-forms-and-inputs/SKILL.md
+  h_83bc5aaa251b9b 1-251
+.claude/skills/emil-get-creative/SKILL.md
+  h_83bc5aaa251b9b 1-95
+.claude/skills/emil-marketing-pages/SKILL.md
+  h_83bc5aaa251b9b 1-160
+.claude/skills/emil-mobile-native/SKILL.md
+  h_83bc5aaa251b9b 1-411
+.claude/skills/emil-performance/SKILL.md
+  h_83bc5aaa251b9b 1-252
+.claude/skills/emil-prep-for-prod/SKILL.md
+  h_83bc5aaa251b9b 1-235
+.claude/skills/emil-prep-for-prod/accessibility.md
+  h_83bc5aaa251b9b 1-283
+.claude/skills/emil-prep-for-prod/baseline.md
+  h_83bc5aaa251b9b 1-160
+.claude/skills/emil-prep-for-prod/content-and-leftovers.md
+  h_83bc5aaa251b9b 1-154
+.claude/skills/emil-prep-for-prod/forms.md
+  h_83bc5aaa251b9b 1-155
+.claude/skills/emil-prep-for-prod/marketing.md
+  h_83bc5aaa251b9b 1-126
+.claude/skills/emil-prep-for-prod/mobile.md
+  h_83bc5aaa251b9b 1-219
+.claude/skills/emil-prep-for-prod/motion.md
+  h_83bc5aaa251b9b 1-144
+.claude/skills/emil-prep-for-prod/performance.md
+  h_83bc5aaa251b9b 1-240
+.claude/skills/emil-prep-for-prod/stability-and-states.md
+  h_83bc5aaa251b9b 1-167
+.claude/skills/emil-prep-for-prod/theming.md
+  h_83bc5aaa251b9b 1-115
+.claude/skills/emil-product-thinking/SKILL.md
+  h_83bc5aaa251b9b 1-76
+.claude/skills/emil-product-thinking/principles.md
+  h_83bc5aaa251b9b 1-317
+.claude/skills/emil-prototype/CONTROLS.md
+  h_83bc5aaa251b9b 1-48
+.claude/skills/emil-prototype/PICKER.md
+  h_83bc5aaa251b9b 1-197
+.claude/skills/emil-prototype/SKILL.md
+  h_83bc5aaa251b9b 1-139
+.claude/skills/emil-surfaces/SKILL.md
+  h_83bc5aaa251b9b 1-241
+.claude/skills/emil-touch-and-accessibility/SKILL.md
+  h_83bc5aaa251b9b 1-246
+.claude/skills/emil-typography/SKILL.md
+  h_83bc5aaa251b9b 1-124
+.claude/skills/emil-typography/font-capabilities.md
+  h_83bc5aaa251b9b 1-101
+.claude/skills/emil-typography/line-behavior.md
+  h_83bc5aaa251b9b 1-75
+.claude/skills/emil-typography/polish-and-accessibility.md
+  h_83bc5aaa251b9b 1-98
+.claude/skills/emil-typography/scale-and-rhythm.md
+  h_83bc5aaa251b9b 1-94
+.claude/skills/emil-typography/tailwind-map.md
+  h_83bc5aaa251b9b 1-77
+.claude/skills/emil-typography/typefaces-and-formats.md
+  h_83bc5aaa251b9b 1-53
+.claude/skills/emil-ui-polish/SKILL.md
+  h_83bc5aaa251b9b 1-196
+.claude/skills/emil-ui-review/SKILL.md
+  h_83bc5aaa251b9b 1-66
+.claude/skills/emil-ui-review/STANDARDS.md
+  h_83bc5aaa251b9b 1-82
+.claude/skills/emil-unslop-code/SKILL.md
+  h_83bc5aaa251b9b 1-135
+.claude/skills/emil-unslop-design/SKILL.md
+  h_83bc5aaa251b9b 1-117
+.claude/skills/emil-unslop-writing/SKILL.md
+  h_83bc5aaa251b9b 1-153
+.claude/skills/emil-writing-skills/SKILL.md
+  h_83bc5aaa251b9b 1-91
+.codex/skills/emil-animations/SKILL.md
+  h_83bc5aaa251b9b 1-126
+.codex/skills/emil-animations/agents/openai.yaml
+  h_83bc5aaa251b9b 1-3
+.codex/skills/emil-animations/patterns.md
+  h_83bc5aaa251b9b 1-185
+.codex/skills/emil-animations/techniques.md
+  h_83bc5aaa251b9b 1-155
+.codex/skills/emil-ask-emil/SKILL.md
+  h_83bc5aaa251b9b 1-115
+.codex/skills/emil-ask-emil/agents/openai.yaml
+  h_83bc5aaa251b9b 1-3
+.codex/skills/emil-ask-lapse/AGENTS.md
+  h_83bc5aaa251b9b 1-126
+.codex/skills/emil-ask-lapse/API.md
+  h_83bc5aaa251b9b 1-182
+.codex/skills/emil-ask-lapse/SKILL.md
+  h_83bc5aaa251b9b 1-203
+.codex/skills/emil-ask-lapse/TROUBLESHOOTING.md
+  h_83bc5aaa251b9b 1-87
+.codex/skills/emil-ask-lapse/agents/openai.yaml
+  h_83bc5aaa251b9b 1-3
+.codex/skills/emil-borrow-a-brain/SKILL.md
+  h_83bc5aaa251b9b 1-94
+.codex/skills/emil-borrow-a-brain/agents/openai.yaml
+  h_83bc5aaa251b9b 1-3
+.codex/skills/emil-borrow-a-brain/templates.md
+  h_83bc5aaa251b9b 1-152
+.codex/skills/emil-build-a-tool/SKILL.md
+  h_83bc5aaa251b9b 1-92
+.codex/skills/emil-build-a-tool/agents/openai.yaml
+  h_83bc5aaa251b9b 1-3
+.codex/skills/emil-color/SKILL.md
+  h_83bc5aaa251b9b 1-77
+.codex/skills/emil-color/agents/openai.yaml
+  h_83bc5aaa251b9b 1-3
+.codex/skills/emil-color/building-scales.md
+  h_83bc5aaa251b9b 1-87
+.codex/skills/emil-color/contrast.md
+  h_83bc5aaa251b9b 1-52
+.codex/skills/emil-color/converting-colors.md
+  h_83bc5aaa251b9b 1-55
+.codex/skills/emil-color/gamut-p3-tailwind.md
+  h_83bc5aaa251b9b 1-98
+.codex/skills/emil-component-design/SKILL.md
+  h_83bc5aaa251b9b 1-231
+.codex/skills/emil-component-design/agents/openai.yaml
+  h_83bc5aaa251b9b 1-3
+.codex/skills/emil-component-design/implementation.md
+  h_83bc5aaa251b9b 1-181
+.codex/skills/emil-design-foundations/SKILL.md
+  h_83bc5aaa251b9b 1-177
+.codex/skills/emil-design-foundations/agents/openai.yaml
+  h_83bc5aaa251b9b 1-3
+.codex/skills/emil-design-foundations/icons-and-illustrations.md
+  h_83bc5aaa251b9b 1-35
+.codex/skills/emil-design-system-docs/SKILL.md
+  h_83bc5aaa251b9b 1-97
+.codex/skills/emil-design-system-docs/agents/openai.yaml
+  h_83bc5aaa251b9b 1-3
+.codex/skills/emil-design-vocabulary/SKILL.md
+  h_83bc5aaa251b9b 1-143
+.codex/skills/emil-design-vocabulary/agents/openai.yaml
+  h_83bc5aaa251b9b 1-3
+.codex/skills/emil-design-vocabulary/terms-index.md
+  h_83bc5aaa251b9b 1-42
+.codex/skills/emil-design-vocabulary/vocabulary.md
+  h_83bc5aaa251b9b 1-361
+.codex/skills/emil-engineering-vocabulary/SKILL.md
+  h_83bc5aaa251b9b 1-144
+.codex/skills/emil-engineering-vocabulary/agents/openai.yaml
+  h_83bc5aaa251b9b 1-3
+.codex/skills/emil-forms-and-inputs/SKILL.md
+  h_83bc5aaa251b9b 1-251
+.codex/skills/emil-forms-and-inputs/agents/openai.yaml
+  h_83bc5aaa251b9b 1-3
+.codex/skills/emil-get-creative/SKILL.md
+  h_83bc5aaa251b9b 1-95
+.codex/skills/emil-get-creative/agents/openai.yaml
+  h_83bc5aaa251b9b 1-3
+.codex/skills/emil-marketing-pages/SKILL.md
+  h_83bc5aaa251b9b 1-160
+.codex/skills/emil-marketing-pages/agents/openai.yaml
+  h_83bc5aaa251b9b 1-3
+.codex/skills/emil-mobile-native/SKILL.md
+  h_83bc5aaa251b9b 1-411
+.codex/skills/emil-mobile-native/agents/openai.yaml
+  h_83bc5aaa251b9b 1-3
+.codex/skills/emil-performance/SKILL.md
+  h_83bc5aaa251b9b 1-252
+.codex/skills/emil-performance/agents/openai.yaml
+  h_83bc5aaa251b9b 1-3
+.codex/skills/emil-prep-for-prod/SKILL.md
+  h_83bc5aaa251b9b 1-235
+.codex/skills/emil-prep-for-prod/accessibility.md
+  h_83bc5aaa251b9b 1-283
+.codex/skills/emil-prep-for-prod/agents/openai.yaml
+  h_83bc5aaa251b9b 1-3
+.codex/skills/emil-prep-for-prod/baseline.md
+  h_83bc5aaa251b9b 1-160
+.codex/skills/emil-prep-for-prod/content-and-leftovers.md
+  h_83bc5aaa251b9b 1-154
+.codex/skills/emil-prep-for-prod/forms.md
+  h_83bc5aaa251b9b 1-155
+.codex/skills/emil-prep-for-prod/marketing.md
+  h_83bc5aaa251b9b 1-126
+.codex/skills/emil-prep-for-prod/mobile.md
+  h_83bc5aaa251b9b 1-219
+.codex/skills/emil-prep-for-prod/motion.md
+  h_83bc5aaa251b9b 1-144
+.codex/skills/emil-prep-for-prod/performance.md
+  h_83bc5aaa251b9b 1-240
+.codex/skills/emil-prep-for-prod/stability-and-states.md
+  h_83bc5aaa251b9b 1-167
+.codex/skills/emil-prep-for-prod/theming.md
+  h_83bc5aaa251b9b 1-115
+.codex/skills/emil-product-thinking/SKILL.md
+  h_83bc5aaa251b9b 1-76
+.codex/skills/emil-product-thinking/agents/openai.yaml
+  h_83bc5aaa251b9b 1-3
+.codex/skills/emil-product-thinking/principles.md
+  h_83bc5aaa251b9b 1-317
+.codex/skills/emil-prototype/CONTROLS.md
+  h_83bc5aaa251b9b 1-48
+.codex/skills/emil-prototype/PICKER.md
+  h_83bc5aaa251b9b 1-197
+.codex/skills/emil-prototype/SKILL.md
+  h_83bc5aaa251b9b 1-139
+.codex/skills/emil-prototype/agents/openai.yaml
+  h_83bc5aaa251b9b 1-3
+.codex/skills/emil-surfaces/SKILL.md
+  h_83bc5aaa251b9b 1-241
+.codex/skills/emil-surfaces/agents/openai.yaml
+  h_83bc5aaa251b9b 1-3
+.codex/skills/emil-touch-and-accessibility/SKILL.md
+  h_83bc5aaa251b9b 1-246
+.codex/skills/emil-touch-and-accessibility/agents/openai.yaml
+  h_83bc5aaa251b9b 1-3
+.codex/skills/emil-typography/SKILL.md
+  h_83bc5aaa251b9b 1-124
+.codex/skills/emil-typography/agents/openai.yaml
+  h_83bc5aaa251b9b 1-3
+.codex/skills/emil-typography/font-capabilities.md
+  h_83bc5aaa251b9b 1-101
+.codex/skills/emil-typography/line-behavior.md
+  h_83bc5aaa251b9b 1-75
+.codex/skills/emil-typography/polish-and-accessibility.md
+  h_83bc5aaa251b9b 1-98
+.codex/skills/emil-typography/scale-and-rhythm.md
+  h_83bc5aaa251b9b 1-94
+.codex/skills/emil-typography/tailwind-map.md
+  h_83bc5aaa251b9b 1-77
+.codex/skills/emil-typography/typefaces-and-formats.md
+  h_83bc5aaa251b9b 1-53
+.codex/skills/emil-ui-polish/SKILL.md
+  h_83bc5aaa251b9b 1-196
+.codex/skills/emil-ui-polish/agents/openai.yaml
+  h_83bc5aaa251b9b 1-3
+.codex/skills/emil-ui-review/SKILL.md
+  h_83bc5aaa251b9b 1-66
+.codex/skills/emil-ui-review/STANDARDS.md
+  h_83bc5aaa251b9b 1-82
+.codex/skills/emil-ui-review/agents/openai.yaml
+  h_83bc5aaa251b9b 1-3
+.codex/skills/emil-unslop-code/SKILL.md
+  h_83bc5aaa251b9b 1-135
+.codex/skills/emil-unslop-code/agents/openai.yaml
+  h_83bc5aaa251b9b 1-3
+.codex/skills/emil-unslop-design/SKILL.md
+  h_83bc5aaa251b9b 1-117
+.codex/skills/emil-unslop-design/agents/openai.yaml
+  h_83bc5aaa251b9b 1-3
+.codex/skills/emil-unslop-writing/SKILL.md
+  h_83bc5aaa251b9b 1-153
+.codex/skills/emil-unslop-writing/agents/openai.yaml
+  h_83bc5aaa251b9b 1-3
+.codex/skills/emil-writing-skills/SKILL.md
+  h_83bc5aaa251b9b 1-91
+.codex/skills/emil-writing-skills/agents/openai.yaml
+  h_83bc5aaa251b9b 1-3
+.cursor/skills/emil-animations/SKILL.md
+  h_83bc5aaa251b9b 1-126
+.cursor/skills/emil-animations/patterns.md
+  h_83bc5aaa251b9b 1-185
+.cursor/skills/emil-animations/techniques.md
+  h_83bc5aaa251b9b 1-155
+.cursor/skills/emil-ask-emil/SKILL.md
+  h_83bc5aaa251b9b 1-115
+.cursor/skills/emil-ask-lapse/AGENTS.md
+  h_83bc5aaa251b9b 1-126
+.cursor/skills/emil-ask-lapse/API.md
+  h_83bc5aaa251b9b 1-182
+.cursor/skills/emil-ask-lapse/SKILL.md
+  h_83bc5aaa251b9b 1-203
+.cursor/skills/emil-ask-lapse/TROUBLESHOOTING.md
+  h_83bc5aaa251b9b 1-87
+.cursor/skills/emil-borrow-a-brain/SKILL.md
+  h_83bc5aaa251b9b 1-94
+.cursor/skills/emil-borrow-a-brain/templates.md
+  h_83bc5aaa251b9b 1-152
+.cursor/skills/emil-build-a-tool/SKILL.md
+  h_83bc5aaa251b9b 1-92
+.cursor/skills/emil-color/SKILL.md
+  h_83bc5aaa251b9b 1-77
+.cursor/skills/emil-color/building-scales.md
+  h_83bc5aaa251b9b 1-87
+.cursor/skills/emil-color/contrast.md
+  h_83bc5aaa251b9b 1-52
+.cursor/skills/emil-color/converting-colors.md
+  h_83bc5aaa251b9b 1-55
+.cursor/skills/emil-color/gamut-p3-tailwind.md
+  h_83bc5aaa251b9b 1-98
+.cursor/skills/emil-component-design/SKILL.md
+  h_83bc5aaa251b9b 1-231
+.cursor/skills/emil-component-design/implementation.md
+  h_83bc5aaa251b9b 1-181
+.cursor/skills/emil-design-foundations/SKILL.md
+  h_83bc5aaa251b9b 1-177
+.cursor/skills/emil-design-foundations/icons-and-illustrations.md
+  h_83bc5aaa251b9b 1-35
+.cursor/skills/emil-design-system-docs/SKILL.md
+  h_83bc5aaa251b9b 1-97
+.cursor/skills/emil-design-vocabulary/SKILL.md
+  h_83bc5aaa251b9b 1-143
+.cursor/skills/emil-design-vocabulary/terms-index.md
+  h_83bc5aaa251b9b 1-42
+.cursor/skills/emil-design-vocabulary/vocabulary.md
+  h_83bc5aaa251b9b 1-361
+.cursor/skills/emil-engineering-vocabulary/SKILL.md
+  h_83bc5aaa251b9b 1-144
+.cursor/skills/emil-forms-and-inputs/SKILL.md
+  h_83bc5aaa251b9b 1-251
+.cursor/skills/emil-get-creative/SKILL.md
+  h_83bc5aaa251b9b 1-95
+.cursor/skills/emil-marketing-pages/SKILL.md
+  h_83bc5aaa251b9b 1-160
+.cursor/skills/emil-mobile-native/SKILL.md
+  h_83bc5aaa251b9b 1-411
+.cursor/skills/emil-performance/SKILL.md
+  h_83bc5aaa251b9b 1-252
+.cursor/skills/emil-prep-for-prod/SKILL.md
+  h_83bc5aaa251b9b 1-235
+.cursor/skills/emil-prep-for-prod/accessibility.md
+  h_83bc5aaa251b9b 1-283
+.cursor/skills/emil-prep-for-prod/baseline.md
+  h_83bc5aaa251b9b 1-160
+.cursor/skills/emil-prep-for-prod/content-and-leftovers.md
+  h_83bc5aaa251b9b 1-154
+.cursor/skills/emil-prep-for-prod/forms.md
+  h_83bc5aaa251b9b 1-155
+.cursor/skills/emil-prep-for-prod/marketing.md
+  h_83bc5aaa251b9b 1-126
+.cursor/skills/emil-prep-for-prod/mobile.md
+  h_83bc5aaa251b9b 1-219
+.cursor/skills/emil-prep-for-prod/motion.md
+  h_83bc5aaa251b9b 1-144
+.cursor/skills/emil-prep-for-prod/performance.md
+  h_83bc5aaa251b9b 1-240
+.cursor/skills/emil-prep-for-prod/stability-and-states.md
+  h_83bc5aaa251b9b 1-167
+.cursor/skills/emil-prep-for-prod/theming.md
+  h_83bc5aaa251b9b 1-115
+.cursor/skills/emil-product-thinking/SKILL.md
+  h_83bc5aaa251b9b 1-76
+.cursor/skills/emil-product-thinking/principles.md
+  h_83bc5aaa251b9b 1-317
+.cursor/skills/emil-prototype/CONTROLS.md
+  h_83bc5aaa251b9b 1-48
+.cursor/skills/emil-prototype/PICKER.md
+  h_83bc5aaa251b9b 1-197
+.cursor/skills/emil-prototype/SKILL.md
+  h_83bc5aaa251b9b 1-139
+.cursor/skills/emil-surfaces/SKILL.md
+  h_83bc5aaa251b9b 1-241
+.cursor/skills/emil-touch-and-accessibility/SKILL.md
+  h_83bc5aaa251b9b 1-246
+.cursor/skills/emil-typography/SKILL.md
+  h_83bc5aaa251b9b 1-124
+.cursor/skills/emil-typography/font-capabilities.md
+  h_83bc5aaa251b9b 1-101
+.cursor/skills/emil-typography/line-behavior.md
+  h_83bc5aaa251b9b 1-75
+.cursor/skills/emil-typography/polish-and-accessibility.md
+  h_83bc5aaa251b9b 1-98
+.cursor/skills/emil-typography/scale-and-rhythm.md
+  h_83bc5aaa251b9b 1-94
+.cursor/skills/emil-typography/tailwind-map.md
+  h_83bc5aaa251b9b 1-77
+.cursor/skills/emil-typography/typefaces-and-formats.md
+  h_83bc5aaa251b9b 1-53
+.cursor/skills/emil-ui-polish/SKILL.md
+  h_83bc5aaa251b9b 1-196
+.cursor/skills/emil-ui-review/SKILL.md
+  h_83bc5aaa251b9b 1-66
+.cursor/skills/emil-ui-review/STANDARDS.md
+  h_83bc5aaa251b9b 1-82
+.cursor/skills/emil-unslop-code/SKILL.md
+  h_83bc5aaa251b9b 1-135
+.cursor/skills/emil-unslop-design/SKILL.md
+  h_83bc5aaa251b9b 1-117
+.cursor/skills/emil-unslop-writing/SKILL.md
+  h_83bc5aaa251b9b 1-153
+.cursor/skills/emil-writing-skills/SKILL.md
+  h_83bc5aaa251b9b 1-91
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "6d3af369a7f1c5cbf62d139950632aa0ecb0fe9b",
+  "prompts": {},
+  "humans": {
+    "h_83bc5aaa251b9b": {
+      "author": "Evan Taylor <eltaylor1104@gmail.com>"
+    }
+  }
+}
