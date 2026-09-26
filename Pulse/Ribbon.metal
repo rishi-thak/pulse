@@ -34,9 +34,11 @@ static float smoothPeak(device const float *peaks, int count, float u, float rad
     return sum / 9.0;
 }
 
+// `level` is this sheet's own loudness; `stageLevel` is the whole mix, for the
+// background glow. `motion` is 0 to hold the sheet's ripple still while it's silent.
 [[ stitchable ]] half4 ribbon(float2 position, half4 color,
                               float4 bounds, float4 rect,
-                              float time, float fold, float level,
+                              float time, float fold, float level, float stageLevel, float motion,
                               float hue, float rate, float texture, float filterAmount,
                               float2 trim, float recording, float drawsBackground,
                               device const float *peaks, int peakCount,
@@ -53,7 +55,7 @@ static float smoothPeak(device const float *peaks, int count, float u, float rad
         float2 centered = (position.xy - bounds.zw * 0.5) / bounds.zw;
         float vignette = 1.0 - dot(centered, centered) * 1.1;
         rgb = float3(0.018, 0.012, 0.02) * vignette;
-        rgb += hsv2rgb(float3(hue, 0.7, 1.0)) * (0.02 + level * 0.06) * exp(-dot(centered, centered) * 4.0);
+        rgb += hsv2rgb(float3(hue, 0.7, 1.0)) * (0.02 + stageLevel * 0.06) * exp(-dot(centered, centered) * 4.0);
 
         // Fine grid that fades in with fold, so the sheet reads as a surface.
         float2 grid = fract(position.xy / 24.0);
@@ -85,7 +87,7 @@ static float smoothPeak(device const float *peaks, int count, float u, float rad
 
     // Layered rings inside the sheet, spreading apart as time stretches.
     float layerCount = 3.0 + 7.0 * rate;
-    float layers = 0.5 + 0.5 * sin(depth * 6.2832 * layerCount - time * 1.6);
+    float layers = 0.5 + 0.5 * sin(depth * 6.2832 * layerCount - time * 1.6 * motion);
     float inside = 1.0 - smoothstep(a - 0.003, a + 0.003, d);
     float rim = smoothstep(0.0, 0.05, 1.0 - depth) * (1.0 - smoothstep(0.05, 0.22, 1.0 - depth));
     float glow = exp(-max(d - a, 0.0) * height * 0.09) * 0.55;

@@ -21,7 +21,7 @@ struct VisualizerView: View {
             TimelineView(.animation) { timeline in
                 let time = reduceMotion ? 0 : timeline.date.timeIntervalSinceReferenceDate
                 ZStack {
-                    RibbonView(engine: engine, layer: mainLayer(rect: rect, drawsBackground: true), time: time)
+                    RibbonView(engine: engine, layer: mainLayer(rect: rect, showsDecks: showsDecks), time: time)
                     if showsDecks {
                         RibbonView(engine: engine, layer: deckLayer(rect: rectB), time: time)
                             .blendMode(.plusLighter)
@@ -56,7 +56,9 @@ struct VisualizerView: View {
 
     // MARK: Layers
 
-    private func mainLayer(rect: CGRect, drawsBackground: Bool) -> RibbonLayer {
+    /// With the decks showing, this sheet is channel 1 and moves only when it
+    /// plays. Otherwise it's the whole instrument and follows the mix.
+    private func mainLayer(rect: CGRect, showsDecks: Bool) -> RibbonLayer {
         let recording = engine.isRecording
         return RibbonLayer(
             rect: rect,
@@ -64,8 +66,10 @@ struct VisualizerView: View {
             hue: recording ? 0.99 : hue(base: Deck.Slot.a.hue),
             trim: engine.trim,
             heads: engine.playheads().flatMap { [Float($0.position), $0.shaderHue] },
+            level: showsDecks ? Float(engine.deckA.meter) : engine.outputLevel,
+            isMoving: showsDecks ? engine.deckA.isAudible : true,
             isRecording: recording,
-            drawsBackground: drawsBackground
+            drawsBackground: true
         )
     }
 
@@ -77,6 +81,8 @@ struct VisualizerView: View {
             hue: hue(base: Deck.Slot.b.hue),
             trim: 0...1,
             heads: deck.isAudible ? [Float(deck.position), -1] : [],
+            level: Float(deck.meter),
+            isMoving: deck.isAudible,
             isRecording: false,
             drawsBackground: false
         )
@@ -193,6 +199,10 @@ private struct RibbonLayer {
     var trim: ClosedRange<Double>
     /// Pairs of position and hue for each playhead beam.
     var heads: [Float]
+    /// This sheet's own loudness, which swells its body.
+    var level: Float
+    /// Whether the sheet's ripple animates; a silent channel holds still.
+    var isMoving: Bool
     var isRecording: Bool
     var drawsBackground: Bool
 }
@@ -213,7 +223,9 @@ private struct RibbonView: View {
                 .float4(Float(rect.minX), Float(rect.minY), Float(rect.maxX), Float(rect.maxY)),
                 .float(Float(time.truncatingRemainder(dividingBy: 3600))),
                 .float(Float(engine.foldAmount)),
+                .float(layer.level),
                 .float(engine.outputLevel),
+                .float(layer.isMoving ? 1 : 0),
                 .float(layer.hue),
                 .float(shape.rate),
                 .float(shape.texture),
