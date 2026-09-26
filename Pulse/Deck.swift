@@ -1,3 +1,5 @@
+import AVFoundation
+import CryptoKit
 import Observation
 import SwiftUI
 
@@ -46,6 +48,13 @@ final class Deck {
     private(set) var peaks: [Float]
     private(set) var duration: Double
     private(set) var bpm: Double?
+    let equalizer = AVAudioUnitEQ(numberOfBands: 3)
+    var low: Float = 0 { didSet { equalizer.bands[0].gain = low } }
+    var mid: Float = 0 { didSet { equalizer.bands[1].gain = mid } }
+    var high: Float = 0 { didSet { equalizer.bands[2].gain = high } }
+    private var cueStorageKey = ""
+    private(set) var hotCues: [Double?] = Array(repeating: nil, count: 4)
+
     var isPlaying = false {
         didSet { updateMotor() }
     }
@@ -72,6 +81,14 @@ final class Deck {
         duration = sample.duration
         bpm = sample.bpm
         turntable.setSample(sample.frames)
+        restoreCues(for: sample)
+        for (index, frequency) in [Float(180), 1000, 8000].enumerated() {
+            let band = equalizer.bands[index]
+            band.filterType = index == 0 ? .lowShelf : (index == 2 ? .highShelf : .parametric)
+            band.frequency = frequency
+            band.bandwidth = 1
+            band.bypass = false
+        }
     }
 
     func load(_ sample: Sample) {
@@ -80,6 +97,45 @@ final class Deck {
         duration = sample.duration
         bpm = sample.bpm
         turntable.setSample(sample.frames)
+        restoreCues(for: sample)
+    }
+
+    private func restoreCues(for sample: Sample) {
+        // Audio identity stays stable across imports and does not collide on filenames.
+        let digest = sample.frames.withUnsafeBytes { SHA256.hash(data: $0) }
+        cueStorageKey = "hotCues." + digest.map { String(format: "%02x", $0) }.joined()
+        let stored = UserDefaults.standard.array(forKey: cueStorageKey) as? [Double]
+        if let stored, stored.count == 4 {
+            hotCues = stored.map { $0.isFinite && $0 >= 0 && $0 < 1 ? $0 : nil }
+        } else {
+            hotCues = Array(repeating: nil, count: 4)
+        }
+    }
+
+    func fireCue(_ index: Int) {
+        guard hotCues.indices.contains(index) else { return }
+        if let saved = hotCues[index] {
+            turntable.cueRequest.store(Float(saved), ordering: .relaxed)
+        } else {
+            hotCues[index] = min(max(position, 0), 0.999999)
+            saveCues()
+        }
+    }
+
+    func clearCue(_ index: Int) {
+        guard hotCues.indices.contains(index) else { return }
+        hotCues[index] = nil
+        saveCues()
+    }
+
+    private func saveCues() {
+        UserDefaults.standard.set(hotCues.map { $0 ?? -1 }, forKey: cueStorageKey)
+    }
+
+    func resetEQ() {
+        low = 0
+        mid = 0
+        high = 0
     }
 
     /// Tempo after the fader, when the track's tempo is known.

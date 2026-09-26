@@ -5,6 +5,7 @@ struct TurntableView: View {
     var engine: SamplerEngine
     @Bindable var deck: Deck
     @State private var isImporting = false
+    @State private var showsEQ = false
     @State private var isSettingBPM = false
     @State private var bpmText = ""
 
@@ -13,11 +14,15 @@ struct TurntableView: View {
             header
             Platter(engine: engine, deck: deck)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
+            hotCueButtons
             transport
         }
         .padding(12)
         .glassEffect(.regular, in: .rect(cornerRadius: 24))
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .sheet(isPresented: $showsEQ) {
+            DeckEQView(deck: deck)
+        }
         .fileImporter(isPresented: $isImporting, allowedContentTypes: [.audio]) { result in
             if case .success(let url) = result {
                 engine.importAudio(from: url, onto: deck)
@@ -34,6 +39,29 @@ struct TurntableView: View {
             Button("Cancel", role: .cancel) {}
         } message: {
             Text(bpmMessage)
+        }
+    }
+
+    private var hotCueButtons: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text("HOT CUES").font(.caption2.weight(.semibold)).foregroundStyle(.secondary)
+            HStack(spacing: 6) {
+                ForEach(0..<4) { index in
+                    Button { engine.fireHotCue(index, on: deck) } label: {
+                        Text("\(index + 1)")
+                            .font(.caption.weight(.bold))
+                            .frame(maxWidth: .infinity, minHeight: 44)
+                            .background(deck.slot.color.opacity(deck.hotCues[index] == nil ? 0.12 : 0.6), in: .rect(cornerRadius: 8))
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel("\(deck.hotCues[index] == nil ? "Set" : "Jump to") hot cue \(index + 1)")
+                    .accessibilityHint("Touch and hold for the clear action")
+                    .contextMenu {
+                        Button("Clear cue", role: .destructive) { deck.clearCue(index) }
+                            .disabled(deck.hotCues[index] == nil)
+                    }
+                }
+            }
         }
     }
 
@@ -62,6 +90,8 @@ struct TurntableView: View {
                     .lineLimit(1)
                     .minimumScaleFactor(0.7)
                 Spacer(minLength: 0)
+                Button("EQ") { showsEQ = true }
+                    .accessibilityLabel("\(deck.slot.name) equalizer")
                 LibraryMenu(engine: engine, title: "Load") { chosen in
                     engine.load(chosen, onto: deck)
                 } onImport: {

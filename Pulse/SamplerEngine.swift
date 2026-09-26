@@ -274,6 +274,14 @@ final class SamplerEngine {
         if deck.isPlaying { startEngine() }
     }
 
+    func fireHotCue(_ index: Int, on deck: Deck) {
+        guard deck.hotCues.indices.contains(index) else { return }
+        if deck === deckA, let saved = deck.hotCues[index], !trim.contains(saved) {
+            resetTrim()
+        }
+        deck.fireCue(index)
+    }
+
     func cue(_ deck: Deck) {
         deck.turntable.cueRequest.store(deck.turntable.loopStart.load(ordering: .relaxed), ordering: .relaxed)
     }
@@ -466,7 +474,9 @@ final class SamplerEngine {
         for deck in [deckA, deckB] {
             let node = deck.turntable.makeNode(sampleRate: Sample.sampleRate)
             engine.attach(node)
-            engine.connect(node, to: submix, format: format)
+            engine.attach(deck.equalizer)
+            engine.connect(node, to: deck.equalizer, format: format)
+            engine.connect(deck.equalizer, to: submix, format: format)
             deckNodes.append(node)
         }
 

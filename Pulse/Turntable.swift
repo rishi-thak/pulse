@@ -81,6 +81,7 @@ final class Turntable: Sendable {
         if !scratching, abs(state.currentRate) < 0.0005, abs(wanted) < 0.0005 {
             output.update(repeating: 0, count: count)
             state.currentGain = targetGain
+            position.store(Float(state.readHead / Double(total)), ordering: .relaxed)
             level.store(level.load(ordering: .relaxed) * 0.8, ordering: .relaxed)
             return
         }
